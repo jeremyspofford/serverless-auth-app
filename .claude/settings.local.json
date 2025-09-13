@@ -4,7 +4,9 @@
       "Bash(mkdir:*)",
       "Bash(mv:*)",
       "Bash(grep:*)",
-      "Bash(xargs ls:*)"
+      "Bash(xargs ls:*)",
+      "Bash(echo $SHELL)",
+      "Bash(mise:*)"
     ],
     "deny": [],
     "ask": []
