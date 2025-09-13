@@ -1,0 +1,65 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    networks:
+      - serverless-network
+
+volumes:
+  localstack-data:
+
+networks:
+  serverless-network:
+    driver: bridge
+
+# services:
+#   localstack:
+#     image: localstack/localstack:latest
+#     container_name: serverless-localstack
+#     ports:
+#       - "4566:4566" # Localstack port
+#       # - "4510-4559:4510-4559" # Additional service ports (optional)
+#     environment:
+#       # AWS Services to run
+#       - SERVICES=lambda,apigateway,dynamodb,s3,cognito-idp,cloudformation,iam,sts
+#       - DEBUG=1 # Debug mode
+#       - LAMBDA_EXECUTOR=docker # How to run Lambda functions
+#       - DOCKER_HOST=unix:///var/run/docker.sock
+#     volumes:
+#       # Mount the Docker socket so that Lambda functions can run in Docker
+#       - "/var/run/docker.sock:/var/run/docker.sock"
+#       # Persist data between runs
+#       - "localstack-data:/var/lib/localstack"
+#     networks:
+#       - serverless-network
+#   backend:
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#       target: builder
+#     container_name: serverless-backend-dev
+#     volumes:
+#       # Mount source code for hot reloading
+#       - ./backend/src:/app/src
+#       - ./backend/dist:/app/dist
+#     environment:
+#       - NODE_ENV=development
+#       - AWS_ENDPOINT_URL=http://localstack:4566 # LocalStack endpoint
+#       - AWS_REGION=us-east-1
+#       - AWS_ACCESS_KEY_ID=test
+#       - AWS_SECRET_ACCESS_KEY=test
+#     depends_on:
+#       - localstack
+#     networks:
+#       - serverless-network
+#     command: npm run watch
+
+# volumes:
+#   # Named volume for LocalStack persistence
+#   localstack-data:
+
+# networks:
+#   # Network for LocalStack services
+#   serverless-network:
+#     driver: bridge

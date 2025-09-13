@@ -1,0 +1,54 @@
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: serverless-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=lambda,apigateway,dynamodb,s3,cognito-idp,cloudformation,iam,sts
+      - DEBUG=1
+      - LAMBDA_EXECUTOR=docker
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "localstack-data:/var/lib/localstack"
+    networks:
+      - serverless-network
+  
+  backend:
+    build:
+      target: builder # Use builder stage from Dockerfile
+    container_name: serverless-backend-dev
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/dist:/app/dist
+    environment:
+      - NODE_ENV=development
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    depends_on:
+      - localstack
+    command: npm run watch
+
+  test:
+    build:
+      context: ./backend
+      target: builder
+    container_name: serverless-tests
+    volumes:
+      - ./backend:/app
+    environment:
+      - NODE_ENV=test
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    depends_on:
+      - localstack
+    networks:
+      - serverless-network
+    command: npm run test:watch
+    profiles:
+      - test # Only runs when specifically requested
