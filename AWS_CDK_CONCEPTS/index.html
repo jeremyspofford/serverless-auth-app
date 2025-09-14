@@ -1,0 +1,1217 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A complete serverless authentication application built with AWS CDK, Lambda, and LocalStack for local development.">
+      
+      
+        <meta name="author" content="Jeremy Spofford">
+      
+      
+      
+        <link rel="prev" href="../PROJECT_SETUP_CHEATSHEET/">
+      
+      
+        <link rel="next" href="../PROJECT_STATUS/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.6">
+    
+    
+      
+        <title>CDK Concepts - Serverless Auth Application</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.35e1ed30.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/styles.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#aws-cdk-concepts-learning-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Serverless Auth Application" class="md-header__button md-logo" aria-label="Serverless Auth Application" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Serverless Auth Application
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CDK Concepts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jeremyspofford/serverless-auth-app" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    serverless-auth-app
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href=".." class="md-tabs__link">
+          
+  
+  Home
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../PROJECT_SETUP_CHEATSHEET/" class="md-tabs__link">
+          
+  
+  Setup
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../PROJECT_STATUS/" class="md-tabs__link">
+          
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Serverless Auth Application" class="md-nav__button md-logo" aria-label="Serverless Auth Application" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Serverless Auth Application
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jeremyspofford/serverless-auth-app" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    serverless-auth-app
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Home
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Setup
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Setup
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PROJECT_SETUP_CHEATSHEET/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    CDK Concepts
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    CDK Concepts
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-aws-cdk" class="md-nav__link">
+    What is AWS CDK?
+  </a>
+  
+    <nav class="md-nav" aria-label="What is AWS CDK?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cdk-vs-other-tools" class="md-nav__link">
+    CDK vs Other Tools
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-cdk-concepts" class="md-nav__link">
+    Core CDK Concepts
+  </a>
+  
+    <nav class="md-nav" aria-label="Core CDK Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-constructs-building-blocks" class="md-nav__link">
+    1. Constructs - Building Blocks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-stacks-deployment-units" class="md-nav__link">
+    2. Stacks - Deployment Units
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-apps-top-level-container" class="md-nav__link">
+    3. Apps - Top-Level Container
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-cdk-terms-you-asked-about" class="md-nav__link">
+    The Three CDK Terms You Asked About
+  </a>
+  
+    <nav class="md-nav" aria-label="The Three CDK Terms You Asked About">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-import-necessary-constructs" class="md-nav__link">
+    1. "Import Necessary Constructs"
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-create-lambda-function-pointing-to-your-compiled-typescript" class="md-nav__link">
+    2. "Create Lambda Function Pointing to Your Compiled TypeScript"
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-set-up-api-gateway-with-lambda-integration" class="md-nav__link">
+    3. "Set Up API Gateway with Lambda Integration"
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cdk-workflow-for-your-project" class="md-nav__link">
+    CDK Workflow for Your Project
+  </a>
+  
+    <nav class="md-nav" aria-label="CDK Workflow for Your Project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development-cycle" class="md-nav__link">
+    Development Cycle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#your-specific-steps" class="md-nav__link">
+    Your Specific Steps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-cdk-patterns-youll-use" class="md-nav__link">
+    Common CDK Patterns You'll Use
+  </a>
+  
+    <nav class="md-nav" aria-label="Common CDK Patterns You'll Use">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pattern-1-lambda-api-gateway-your-current-project" class="md-nav__link">
+    Pattern 1: Lambda + API Gateway (Your Current Project)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-2-lambda-dynamodb-next-phase" class="md-nav__link">
+    Pattern 2: Lambda + DynamoDB (Next Phase)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-3-multiple-environments" class="md-nav__link">
+    Pattern 3: Multiple Environments
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cdk-best-practices-for-devops" class="md-nav__link">
+    CDK Best Practices for DevOps
+  </a>
+  
+    <nav class="md-nav" aria-label="CDK Best Practices for DevOps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-organize-by-logical-boundaries" class="md-nav__link">
+    1. Organize by Logical Boundaries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-use-environment-variables" class="md-nav__link">
+    2. Use Environment Variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-output-important-values" class="md-nav__link">
+    3. Output Important Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-tag-everything-for-cost-tracking" class="md-nav__link">
+    4. Tag Everything for Cost Tracking
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-cdk-gotchas" class="md-nav__link">
+    Common CDK Gotchas
+  </a>
+  
+    <nav class="md-nav" aria-label="Common CDK Gotchas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-asset-path-issues" class="md-nav__link">
+    1. Asset Path Issues
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-missing-permissions" class="md-nav__link">
+    2. Missing Permissions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-deployment-order" class="md-nav__link">
+    3. Deployment Order
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-path-for-cdk" class="md-nav__link">
+    Learning Path for CDK
+  </a>
+  
+    <nav class="md-nav" aria-label="Learning Path for CDK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-your-current-level" class="md-nav__link">
+    Beginner (Your Current Level)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-next-steps" class="md-nav__link">
+    Intermediate (Next Steps)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-future-goals" class="md-nav__link">
+    Advanced (Future Goals)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#useful-cdk-commands" class="md-nav__link">
+    Useful CDK Commands
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps-when-you-return" class="md-nav__link">
+    Next Steps When You Return
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PROJECT_STATUS/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Project Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="aws-cdk-concepts-learning-guide">AWS CDK Concepts &amp; Learning Guide</h1>
+<h2 id="what-is-aws-cdk">What is AWS CDK?</h2>
+<p><strong>AWS Cloud Development Kit (CDK)</strong> is Infrastructure as Code (IaC) that lets you define AWS resources using familiar programming languages instead of YAML/JSON templates.</p>
+<h3 id="cdk-vs-other-tools">CDK vs Other Tools</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Format</th>
+<th>Learning Curve</th>
+<th>Power</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CDK</strong></td>
+<td>TypeScript/Python/Java</td>
+<td>Medium</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>CloudFormation</strong></td>
+<td>YAML/JSON</td>
+<td>Low</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>Terraform</strong></td>
+<td>HCL</td>
+<td>Medium</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>Serverless Framework</strong></td>
+<td>YAML</td>
+<td>Low</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why CDK for DevOps</strong>: Real programming language means loops, conditions, functions, and IDE support with autocomplete.</p>
+<hr />
+<h2 id="core-cdk-concepts">Core CDK Concepts</h2>
+<h3 id="1-constructs-building-blocks">1. <strong>Constructs</strong> - Building Blocks</h3>
+<p><strong>What they are</strong>: Reusable cloud components that represent AWS resources.</p>
+<pre><code class="language-typescript">// A construct is like a LEGO piece for AWS infrastructure
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+
+// This construct represents a Lambda function
+const myFunction = new lambda.Function(this, 'MyFunction', {
+  runtime: lambda.Runtime.NODEJS_20_X,
+  handler: 'index.handler',
+  code: lambda.Code.fromAsset('dist')
+});
+</code></pre>
+<p><strong>Think of constructs as:</strong>
+- <strong>Low-level</strong>: Direct 1:1 mapping to CloudFormation (e.g., <code>CfnFunction</code>)
+- <strong>High-level</strong>: Opinionated best practices (e.g., <code>Function</code>)
+- <strong>Patterns</strong>: Multiple resources working together (e.g., <code>ApplicationLoadBalancedFargateService</code>)</p>
+<h3 id="2-stacks-deployment-units">2. <strong>Stacks</strong> - Deployment Units</h3>
+<p><strong>What they are</strong>: Groups of related resources that get deployed together.</p>
+<pre><code class="language-typescript">export class MyStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    // All resources in this stack get deployed together
+    const lambda = new lambda.Function(/* ... */);
+    const api = new apigateway.RestApi(/* ... */);
+  }
+}
+</code></pre>
+<p><strong>Think of stacks as:</strong> Deployment boundaries - everything in one stack deploys/updates/deletes together.</p>
+<h3 id="3-apps-top-level-container">3. <strong>Apps</strong> - Top-Level Container</h3>
+<p><strong>What they are</strong>: Contains one or more stacks, represents your entire application.</p>
+<pre><code class="language-typescript">const app = new cdk.App();
+new MyStack(app, 'MyStack');
+new DatabaseStack(app, 'DatabaseStack');
+</code></pre>
+<p><strong>Hierarchy</strong>: <code>App</code> → <code>Stack</code> → <code>Construct</code> → AWS Resources</p>
+<hr />
+<h2 id="the-three-cdk-terms-you-asked-about">The Three CDK Terms You Asked About</h2>
+<h3 id="1-import-necessary-constructs">1. "Import Necessary Constructs"</h3>
+<p><strong>What this means</strong>: Bring in the CDK libraries for the AWS services you want to use.</p>
+<pre><code class="language-typescript">// These are the &quot;constructs&quot; - pre-built components for AWS services
+import * as lambda from 'aws-cdk-lib/aws-lambda';        // For Lambda functions
+import * as apigateway from 'aws-cdk-lib/aws-apigateway'; // For API Gateway
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';     // For DynamoDB
+import { Construct } from 'constructs';                    // Base construct class
+</code></pre>
+<p><strong>Why needed</strong>: CDK doesn't import everything by default - you only import what you use for smaller bundle sizes.</p>
+<p><strong>Real-world analogy</strong>: Like importing specific tools from a toolbox instead of carrying the entire toolbox.</p>
+<h3 id="2-create-lambda-function-pointing-to-your-compiled-typescript">2. "Create Lambda Function Pointing to Your Compiled TypeScript"</h3>
+<p><strong>What this means</strong>: Tell CDK where your Lambda code lives and how to configure it.</p>
+<pre><code class="language-typescript">const helloLambda = new lambda.Function(this, 'HelloHandler', {
+  runtime: lambda.Runtime.NODEJS_20_X,           // Which Node.js version
+  code: lambda.Code.fromAsset('../../backend/dist'), // Where your compiled JS is
+  handler: 'index.handler',                       // Which function to call
+  timeout: cdk.Duration.seconds(30),            // How long it can run
+  environment: {                                 // Environment variables
+    NODE_ENV: 'development'
+  }
+});
+</code></pre>
+<p><strong>Breaking it down:</strong>
+- <strong><code>this</code></strong>: Add this Lambda to the current stack
+- <strong><code>'HelloHandler'</code></strong>: Logical name for this Lambda (CDK will create unique AWS name)
+- <strong><code>runtime</code></strong>: Tell AWS which Node.js version to use
+- <strong><code>code.fromAsset()</code></strong>: Point to your compiled JavaScript files
+- <strong><code>handler</code></strong>: <code>index.handler</code> means call <code>handler</code> function in <code>index.js</code></p>
+<p><strong>Real-world analogy</strong>: Like telling a chef (AWS) which recipe book (your code) to use and which recipe (handler function) to make.</p>
+<h3 id="3-set-up-api-gateway-with-lambda-integration">3. "Set Up API Gateway with Lambda Integration"</h3>
+<p><strong>What this means</strong>: Create a REST API that forwards requests to your Lambda function.</p>
+<pre><code class="language-typescript">// Step 1: Create the API Gateway
+const api = new apigateway.RestApi(this, 'MyApi', {
+  restApiName: 'My Serverless API',
+  description: 'API for my serverless app'
+});
+
+// Step 2: Create the integration (connection between API and Lambda)
+const lambdaIntegration = new apigateway.LambdaIntegration(helloLambda);
+
+// Step 3: Add routes (URL paths) that trigger the Lambda
+api.root.addMethod('GET', lambdaIntegration);     // GET /
+api.root.addResource('users').addMethod('POST', lambdaIntegration); // POST /users
+</code></pre>
+<p><strong>What happens:</strong>
+1. <strong>User makes HTTP request</strong> → <code>GET https://api.example.com/</code>
+2. <strong>API Gateway receives it</strong> → Routes to Lambda function
+3. <strong>Lambda processes request</strong> → Returns response
+4. <strong>API Gateway sends response</strong> → Back to user</p>
+<p><strong>Real-world analogy</strong>: API Gateway is like a receptionist who routes phone calls (HTTP requests) to the right department (Lambda function).</p>
+<hr />
+<h2 id="cdk-workflow-for-your-project">CDK Workflow for Your Project</h2>
+<h3 id="development-cycle">Development Cycle</h3>
+<pre><code class="language-mermaid">graph LR
+    A[Write CDK Code] --&gt; B[CDK Synth]
+    B --&gt; C[CloudFormation Template]
+    C --&gt; D[CDK Deploy]
+    D --&gt; E[AWS Resources Created]
+    E --&gt; F[Test &amp; Iterate]
+    F --&gt; A
+</code></pre>
+<h3 id="your-specific-steps">Your Specific Steps</h3>
+<ol>
+<li>
+<p><strong>Write Infrastructure Code</strong> (TypeScript)
+   <code>typescript
+   // Define what you want: Lambda + API Gateway
+   const lambda = new lambda.Function(/* config */);
+   const api = new apigateway.RestApi(/* config */);
+   api.root.addMethod('GET', new apigateway.LambdaIntegration(lambda));</code></p>
+</li>
+<li>
+<p><strong>CDK Synthesizes</strong> (Converts to CloudFormation)
+   <code>bash
+   npx cdk synth  # Creates CloudFormation JSON</code></p>
+</li>
+<li>
+<p><strong>CDK Deploys</strong> (Creates AWS Resources)
+   <code>bash
+   npx cdklocal deploy  # Creates actual Lambda &amp; API Gateway in LocalStack</code></p>
+</li>
+</ol>
+<hr />
+<h2 id="common-cdk-patterns-youll-use">Common CDK Patterns You'll Use</h2>
+<h3 id="pattern-1-lambda-api-gateway-your-current-project">Pattern 1: Lambda + API Gateway (Your Current Project)</h3>
+<pre><code class="language-typescript">const lambda = new lambda.Function(this, 'Handler', { /* config */ });
+const api = new apigateway.RestApi(this, 'Api', { /* config */ });
+api.root.addMethod('GET', new apigateway.LambdaIntegration(lambda));
+</code></pre>
+<h3 id="pattern-2-lambda-dynamodb-next-phase">Pattern 2: Lambda + DynamoDB (Next Phase)</h3>
+<pre><code class="language-typescript">const table = new dynamodb.Table(this, 'UsersTable', {
+  partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING }
+});
+
+const lambda = new lambda.Function(this, 'Handler', { /* config */ });
+table.grantReadWriteData(lambda);  // Gives Lambda permission to access table
+</code></pre>
+<h3 id="pattern-3-multiple-environments">Pattern 3: Multiple Environments</h3>
+<pre><code class="language-typescript">// Different configurations for dev/prod
+const isProd = props.stage === 'production';
+const lambda = new lambda.Function(this, 'Handler', {
+  timeout: isProd ? cdk.Duration.seconds(30) : cdk.Duration.seconds(60),
+  memorySize: isProd ? 512 : 128
+});
+</code></pre>
+<hr />
+<h2 id="cdk-best-practices-for-devops">CDK Best Practices for DevOps</h2>
+<h3 id="1-organize-by-logical-boundaries">1. <strong>Organize by Logical Boundaries</strong></h3>
+<pre><code>infrastructure/
+├── lib/
+│   ├── auth-stack.ts      # Cognito, IAM
+│   ├── api-stack.ts       # API Gateway, Lambda
+│   ├── database-stack.ts  # DynamoDB
+│   └── monitoring-stack.ts # CloudWatch
+</code></pre>
+<h3 id="2-use-environment-variables">2. <strong>Use Environment Variables</strong></h3>
+<pre><code class="language-typescript">const stage = process.env.STAGE || 'dev';
+const lambda = new lambda.Function(this, `Handler-${stage}`, {
+  functionName: `myapp-handler-${stage}`
+});
+</code></pre>
+<h3 id="3-output-important-values">3. <strong>Output Important Values</strong></h3>
+<pre><code class="language-typescript">new cdk.CfnOutput(this, 'ApiUrl', {
+  value: api.url,
+  description: 'API Gateway URL for testing'
+});
+</code></pre>
+<h3 id="4-tag-everything-for-cost-tracking">4. <strong>Tag Everything for Cost Tracking</strong></h3>
+<pre><code class="language-typescript">cdk.Tags.of(this).add('Project', 'ServerlessAuth');
+cdk.Tags.of(this).add('Environment', stage);
+</code></pre>
+<hr />
+<h2 id="common-cdk-gotchas">Common CDK Gotchas</h2>
+<h3 id="1-asset-path-issues">1. <strong>Asset Path Issues</strong></h3>
+<pre><code class="language-typescript">// ❌ Wrong - relative to CDK code
+code: lambda.Code.fromAsset('./backend/dist')
+
+// ✅ Correct - relative path properly calculated
+code: lambda.Code.fromAsset(path.join(__dirname, '../../backend/dist'))
+</code></pre>
+<h3 id="2-missing-permissions">2. <strong>Missing Permissions</strong></h3>
+<pre><code class="language-typescript">// ❌ Lambda can't access DynamoDB
+const table = new dynamodb.Table(/* ... */);
+const lambda = new lambda.Function(/* ... */);
+
+// ✅ Explicit permission grant
+table.grantReadWriteData(lambda);
+</code></pre>
+<h3 id="3-deployment-order">3. <strong>Deployment Order</strong></h3>
+<pre><code class="language-typescript">// CDK automatically handles dependencies
+const lambda = new lambda.Function(/* ... */);
+const api = new apigateway.RestApi(/* ... */);
+api.root.addMethod('GET', new apigateway.LambdaIntegration(lambda));
+// CDK knows to create Lambda first, then API Gateway
+</code></pre>
+<hr />
+<h2 id="learning-path-for-cdk">Learning Path for CDK</h2>
+<h3 id="beginner-your-current-level">Beginner (Your Current Level)</h3>
+<ul>
+<li>[x] Understand constructs, stacks, apps</li>
+<li>[x] Create Lambda function</li>
+<li>[x] Set up API Gateway integration</li>
+<li>[ ] Deploy to LocalStack</li>
+<li>[ ] Add environment variables</li>
+</ul>
+<h3 id="intermediate-next-steps">Intermediate (Next Steps)</h3>
+<ul>
+<li>[ ] Add DynamoDB table</li>
+<li>[ ] Implement IAM permissions</li>
+<li>[ ] Add Cognito user pool</li>
+<li>[ ] Create multiple environments</li>
+<li>[ ] Add CloudWatch monitoring</li>
+</ul>
+<h3 id="advanced-future-goals">Advanced (Future Goals)</h3>
+<ul>
+<li>[ ] Custom constructs</li>
+<li>[ ] Cross-stack references</li>
+<li>[ ] CDK Pipelines (CI/CD)</li>
+<li>[ ] Testing CDK code</li>
+<li>[ ] CDK aspects for compliance</li>
+</ul>
+<hr />
+<h2 id="useful-cdk-commands">Useful CDK Commands</h2>
+<pre><code class="language-bash"># Basic commands
+npx cdk init app --language typescript  # Create new CDK app
+npx cdk synth                          # Generate CloudFormation
+npx cdk deploy                         # Deploy to AWS
+npx cdk destroy                        # Remove all resources
+npx cdk diff                          # Show changes
+
+# LocalStack commands (for local development)
+npx cdklocal bootstrap                 # Setup CDK for LocalStack
+npx cdklocal deploy                    # Deploy to LocalStack
+npx cdklocal destroy                   # Remove from LocalStack
+
+# Useful flags
+npx cdk deploy --require-approval never # Don't ask for confirmation
+npx cdk deploy --hotswap               # Fast deployment for dev
+npx cdk deploy --profile myprofile     # Use specific AWS profile
+</code></pre>
+<hr />
+<h2 id="next-steps-when-you-return">Next Steps When You Return</h2>
+<ol>
+<li><strong>Install CDK dependencies</strong> in your infrastructure project</li>
+<li><strong>Configure your CDK stack</strong> with the Lambda and API Gateway constructs</li>
+<li><strong>Test the deployment</strong> to LocalStack</li>
+<li><strong>Understand the generated CloudFormation</strong> to see what CDK created</li>
+<li><strong>Add more functionality</strong> like DynamoDB and error handling</li>
+</ol>
+<p>Remember: CDK is just a tool that generates CloudFormation - understanding what AWS resources you're creating is more important than memorizing CDK syntax!</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigate.path", "navigate.top", "navigate.footer", "toc.follow", "toc.integrate", "search.suggest", "search.share", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+    
+  </body>
+</html>
