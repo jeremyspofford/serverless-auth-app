@@ -17,7 +17,7 @@ Build a serverless web application where users can sign up, log in, and access t
 ## Architecture Diagram
 
 ```mermaid
-flowchart TB
+flowchart LR
     subgraph "Frontend (Static)"
         S3[S3 Bucket<br/>Static Files]
         CF[CloudFront CDN<br/>HTTPS/TLS]

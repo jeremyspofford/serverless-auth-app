@@ -1,6 +1,6 @@
 # AWS CDK Concepts & Learning Guide
 
-## 📋 What is AWS CDK?
+## What is AWS CDK?
 
 **AWS Cloud Development Kit (CDK)** is Infrastructure as Code (IaC) that lets you define AWS resources using familiar programming languages instead of YAML/JSON templates.
 
@@ -17,7 +17,7 @@
 
 ---
 
-## 🏗️ Core CDK Concepts
+## Core CDK Concepts
 
 ### 1. **Constructs** - Building Blocks
 
@@ -72,7 +72,7 @@ new DatabaseStack(app, 'DatabaseStack');
 
 ---
 
-## 🔧 The Three CDK Terms You Asked About
+## The Three CDK Terms You Asked About
 
 ### 1. "Import Necessary Constructs"
 
@@ -144,7 +144,7 @@ api.root.addResource('users').addMethod('POST', lambdaIntegration); // POST /use
 
 ---
 
-## 🎯 CDK Workflow for Your Project
+## CDK Workflow for Your Project
 
 ### Development Cycle
 
@@ -180,7 +180,7 @@ graph LR
 
 ---
 
-## 🧩 Common CDK Patterns You'll Use
+## Common CDK Patterns You'll Use
 
 ### Pattern 1: Lambda + API Gateway (Your Current Project)
 ```typescript
@@ -211,7 +211,7 @@ const lambda = new lambda.Function(this, 'Handler', {
 
 ---
 
-## 💡 CDK Best Practices for DevOps
+## CDK Best Practices for DevOps
 
 ### 1. **Organize by Logical Boundaries**
 ```
@@ -247,7 +247,7 @@ cdk.Tags.of(this).add('Environment', stage);
 
 ---
 
-## 🐛 Common CDK Gotchas
+## Common CDK Gotchas
 
 ### 1. **Asset Path Issues**
 ```typescript
@@ -279,7 +279,7 @@ api.root.addMethod('GET', new apigateway.LambdaIntegration(lambda));
 
 ---
 
-## 🎓 Learning Path for CDK
+## Learning Path for CDK
 
 ### Beginner (Your Current Level)
 - [x] Understand constructs, stacks, apps
@@ -304,7 +304,7 @@ api.root.addMethod('GET', new apigateway.LambdaIntegration(lambda));
 
 ---
 
-## 📚 Useful CDK Commands
+## Useful CDK Commands
 
 ```bash
 # Basic commands
@@ -327,7 +327,7 @@ npx cdk deploy --profile myprofile     # Use specific AWS profile
 
 ---
 
-## 🔗 Next Steps When You Return
+## Next Steps When You Return
 
 1. **Install CDK dependencies** in your infrastructure project
 2. **Configure your CDK stack** with the Lambda and API Gateway constructs

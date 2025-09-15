@@ -7,6 +7,13 @@ aws-cli = "latest"
 PROJECT_NAME = "{{ config_root | basename }}"
 _.python.venv = { path = ".venv", create = true }
 
+[tasks.info]
+description = "Display project information"
+run = '''
+echo "Project: $PROJECT_NAME"
+echo "Virtual Environment: $VIRTUAL_ENV"
+'''
+
 # Documentation-related tasks
 [tasks."docs:install"]
 description = "Install documentation dependencies"
@@ -25,13 +32,10 @@ run = "mkdocs serve --dev-addr 0.0.0.0:8000"
 description = "Deploy documentation to GitHub Pages"
 run = "mkdocs gh-deploy"
 
-[tasks.info]
-run = '''
-echo "Project: $PROJECT_NAME"
-echo "Virtual Environment: $VIRTUAL_ENV"
-'''
+[tasks.dev]
+description = "Development workflow"
+run = "docker-compose -f docker-compose.base.yml -f docker-compose.dev.yml up --build"
 
-# [tasks."dev"]
-# # Development workflow tasks
-# start = "docker-compose -f docker-compose.base.yml -f docker-compose.dev.yml up --build"
-# test = "docker-compose -f docker-compose.base.yml -f docker-compose.dev.yml --profile test up"
+[tasks.test]
+description = "Test workflow"
+run = "docker-compose -f docker-compose.base.yml -f docker-compose.dev.yml --profile test up"

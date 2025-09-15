@@ -1,0 +1,74 @@
+site_name: Serverless Auth Application
+site_description: A complete serverless authentication application built with AWS CDK, Lambda, and LocalStack for local development.
+site_author: Jeremy Spofford
+repo_url: https://github.com/jeremyspofford/serverless-auth-app
+repo_name: serverless-auth-app
+
+theme: 
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    # Navigate
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigate.path
+    - navigate.top
+    - navigate.footer
+    - toc.follow
+    - toc.integrate
+
+    # Search
+    - search.suggest
+    - search.share
+    - search.highlight
+
+    # Code Blocks
+    - content.code.copy
+    - content.code.annotate
+
+  icon:
+    repo: fontawesome/brands/github
+
+  # favicon: # TODO:
+  # logo: # TODO:
+
+plugins:
+  - mermaid2
+
+nav:
+  - Home:
+    - Overview: index.md
+    # - Quick Start: quickstart.md
+  - Setup:
+    - Getting Started: PROJECT_SETUP_CHEATSHEET.md
+    - CDK Concepts: AWS_CDK_CONCEPTS.md
+    # - Local Development: local-development.md
+  - Development:
+    - Project Status: PROJECT_STATUS.md
+    - Project Plan: PROJECT_PLAN.md
+    # - Architecture: architecture.md
+    # - API Reference: api-reference.md
+  # - Deployment:
+  #   - AWS Deployment: deployment/aws.md
+  #   - CI/CD Pipeline: deployment/cicd.md
+  # - Resources:
+  #   - Troubleshooting: troubleshooting.md
+  #   - Contributing: contributing.md
+
+extra_css:
+  - assets/stylesheets/styles.css

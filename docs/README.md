@@ -2,7 +2,7 @@
 
 This directory contains all project documentation and learning resources.
 
-## 📋 Available Documentation
+## Available Documentation
 
 ### Setup & Configuration
 - **[PROJECT_SETUP_CHEATSHEET.md](./PROJECT_SETUP_CHEATSHEET.md)** - Complete project bootstrap guide
@@ -25,7 +25,7 @@ This directory contains all project documentation and learning resources.
   - Common patterns and best practices
   - Learning path from beginner to advanced
 
-## 🎯 Quick Navigation
+## Quick Navigation
 
 ### Getting Started
 1. Read [PROJECT_SETUP_CHEATSHEET.md](./PROJECT_SETUP_CHEATSHEET.md) for initial setup
@@ -37,7 +37,7 @@ This directory contains all project documentation and learning resources.
 - **Progress**: Update status document as you complete tasks
 - **Learning**: Reference CDK concepts as needed
 
-## 📝 Maintaining Documentation
+## Maintaining Documentation
 
 ### When to Update
 
